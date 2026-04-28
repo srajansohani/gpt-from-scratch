@@ -1,13 +1,16 @@
 
 
-# 🧠 Building GPT from Scratch (Karpathy Reproduction + Extensions)
+# 🧠 Building GPT from Scratch: A Comprehensive Journey
 
-This repository documents my journey of **rebuilding a GPT-style language model from scratch**, inspired by the tutorial by Andrej Karpathy.
+This repository documents my journey of **rebuilding a GPT-style language model from scratch**. While initially inspired by the excellent tutorial by Andrej Karpathy, this project has evolved into a much broader exploration of Large Language Model architectures.
 
-Along the way, I go beyond replication by adding:
-- My own **experiments**
-- Deeper **intuitions**
-- Practical **modifications and improvements**
+In addition to foundational concepts, this repository now includes custom implementations of key transformer components (such as GELU activations, Layer Normalization, and varied attention mechanisms) and goes beyond a simple reproduction.
+
+Along the way, I focus on:
+- **Modular Component Implementation**: Building and understanding individual blocks like FeedForward Layers and LayerNorm from the ground up.
+- My own **experiments** and architectural variations.
+- Deeper **intuitions** into the math and engineering behind modern LLMs.
+- Practical **modifications and improvements**.
 
 ---
 
