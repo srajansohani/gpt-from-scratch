@@ -21,9 +21,8 @@ class LayerNormalization(nn.Module):
         ## the mean and variance are calculated along the last dimension of the input tensor x, which typically corresponds to the feature dimension. The keepdim=True argument ensures that the output tensors for mean and variance have the same number of dimensions as the input tensor, allowing for proper broadcasting during normalization.
         ### the formula for layer normalization is: 
 
-        x_normalize = (x - mean)/var.sqrt() + self.eps
+        x_normalize = (x - mean)/torch.sqrt(var + self.eps)
 
-        print ("Normalized: = ",x_normalize)
 
         out = self.scale * x_normalize + self.shift
 
