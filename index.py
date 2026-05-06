@@ -3,23 +3,23 @@ import torch
 # from MultiHeadAttention import MultiHeadAttentionLayer
 from LayerNormalization import LayerNormalization
 from TransformerBlock import TransformerBlock
+from DummyGPTModule import DummyGPTModule
+import tiktoken
 
 # text = "your journey starts with one step"
 config = {
-    "embedding_dimension":3,
+    "embedding_dimension":768,
     "context_length":1024,
     "num_heads":2,
     "dropout_rate":0.1,
-    "qkv_bias": False
+    "qkv_bias": False,
+    "vocab_size": 50257,
+    "num_layers":6,
 } 
-inputs = torch.tensor([
-    [0.43,0.15,0.89], #your   (x^1)
-    [0.55,0.87,0.66], #journey (x^2)
-    [0.57,0.85,0.64], #starts  (x^3)
-    [0.22,0.58,0.33], #with    ((x^4)
-    [0.77,0.25,0.10], #one     ()
-    [0.05,0.80,0.55]# step
-])
+
+
+
+
 
 # casual_attention_layer = CausualAttentionLayer(3,3)
 
@@ -27,21 +27,49 @@ inputs = torch.tensor([
 
 # print(output)
 
-inputs = torch.stack([inputs,inputs]) ## here we are stacking the same input 3 times to create a batch of 3 sequences of 6 tokens each with 3 dimensional embeddings
+# inputs = torch.stack([inputs,inputs]) ## here we are stacking the same input 3 times to create a batch of 3 sequences of 6 tokens each with 3 dimensional embeddings
 
 # print(inputs.shape)
 
 # multi_head_attention_layer = MultiHeadAttentionLayer(3,3,6,2) 
-transformer_block = TransformerBlock({
-    "embedding_dimension":3,
-    "context_length":6,
-    "num_heads":2,
-    "dropout_rate":0.1
-})
+model = DummyGPTModule(config)
+
+
 
 
 
 
 # z = multi_head_attention_layer(inputs)
-z = transformer_block(inputs)
-print(z.shape,z)
+# z = gpt(inputs)
+
+# print(torch.argmax(z,dim=-1))
+
+# print(z.shape,z)
+
+
+def generate_text_simple(model, input_tokens, max_length,contex_size):
+    for _ in range(max_length):
+
+        input_under_context = input_tokens[:,-contex_size:]
+        with torch.no_grad():
+              logits = model(input_under_context)
+       
+        logits = logits[:,-1,:]  ## (batch_size, tokens, vocab_size)
+
+        probabs = torch.softmax(logits,dim=-1) ## (batch_size, vocab_size)
+
+        next_token = torch.argmax(probabs, dim=-1,keepdim=True)
+
+        input_tokens = torch.cat((input_tokens, next_token), dim=1)
+    return input_tokens
+
+
+text = "Hello, I am"
+
+tokenizer = tiktoken.encoding_for_model("gpt2")
+
+
+input_tokens = torch.tensor(tokenizer.encode(text)).unsqueeze(0) 
+
+generated_tokens = generate_text_simple(model, input_tokens, max_length=10, contex_size=config["context_length"])
+print(tokenizer.decode(generated_tokens[0]))
