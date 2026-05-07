@@ -6,10 +6,10 @@ from utils import calc_loss_loader,calculate_batch_loss,generate_text_simple,eva
 from DummyGPTModule import DummyGPTModule
 import time
 
-
 from TextDataClass import create_dataloader
 
-
+def remove_consecutive_spaces(text):
+    return re.sub(r'\s+', ' ', text).strip()
 config = {
     "embedding_dimension":768,
     "context_length":256,
@@ -30,6 +30,7 @@ tokenizer = tiktoken.encoding_for_model("gpt2")
 with open ('data.txt','r') as file:
     content = file.read()
 
+
 pattern = r"\d{2}/\d{2}/\d{4}, \d{2}:\d{2} - "
 content = re.sub(pattern, "", content)
 
@@ -43,7 +44,6 @@ split_idx = int(len(content) * train_ratio)
 train_data = content[:split_idx]
 test_data = content[split_idx:]
 
-print(len(tokenizer.encode(train_data)))
 
 train_loader = create_dataloader(text=train_data,max_length=context_size,stride=stride,batch_size=2,shuffle=True,drop_last=True,num_workers=0)
 
