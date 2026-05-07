@@ -21,10 +21,9 @@ with open('chat.txt', 'r', encoding='utf-8') as f:
 
 text = text.lower()
 
-target = 'awani'
+target = ''
 count = text.count(target)
 
-print(f"{count} many occurence of {target} in srajan and karina's chat")
 
 # 22/01/2023, 22:48
 # pattern = r"^\d{2}/\d{2}/\d{4}, \d{2}:\d{2} - "
